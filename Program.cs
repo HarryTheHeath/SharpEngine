@@ -27,48 +27,48 @@ namespace SharpEngine
             // engine rendering loop
             while (!Glfw.WindowShouldClose(window)) {
                 Glfw.PollEvents(); // react to window changes (position etc.)
-                glClearColor(0.0f, 0.05f, 0.2f, 1);
+                glClearColor(0.2f, 0.05f, 0.2f, 1);
                 glClear(GL_COLOR_BUFFER_BIT);
                 glDrawArrays(GL_TRIANGLES, 0, 3);
-                glFlush(); 
-                
+                glFlush();
+                Shrink();
                 UpdateTriangleBuffer();
             }
         }
 
         static void MoveRight()
         {
-            vertices[0] += 0.001f;
-            vertices[3] += 0.001f;
-            vertices[6] += 0.001f;
+            vertices[0] += 0.0001f;
+            vertices[3] += 0.0001f;
+            vertices[6] += 0.0001f;
         }
 
         static void MoveDown()
         {
-            vertices [1] += -0.001f;
-            vertices [4] += -0.001f;
-            vertices [7] += -0.001f;
+            vertices [1] += -0.0001f;
+            vertices [4] += -0.0001f;
+            vertices [7] += -0.0001f;
         }
 
         static void Shrink()
         {
-            if (vertices[7]>0)
+            if (vertices[7]>=0)
             {
-                vertices[0] += 0.0001f;
-                vertices[1] += 0.0001f;
-                vertices[3] -= 0.0001f;
-                vertices[4] += 0.0001f;
-                vertices[7] -= 0.0001f;
+                vertices[0] += 0.001f;
+                vertices[1] += 0.001f;
+                vertices[3] -= 0.001f;
+                vertices[4] += 0.001f;
+                vertices[7] -= 0.001f;
             }
         }
         
         static void Grow()
         {
-            vertices[0] -= 0.0001f;
-            vertices[1] -= 0.0001f;
-            vertices[3] += 0.0001f;
-            vertices[4] -= 0.0001f;
-            vertices[7] += 0.0001f;
+            vertices[0] -= 0.001f;
+            vertices[1] -= 0.001f;
+            vertices[3] += 0.001f;
+            vertices[4] -= 0.001f;
+            vertices[7] += 0.001f;
         }
 
         static void CreateShaderProgram() {
