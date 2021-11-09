@@ -43,7 +43,7 @@ namespace SharpEngine
 
         static unsafe void LoadTriangleIntoBuffer() {
             float[] vertices = new float[] {
-                -0.5f, -.05f, 0f,
+                -0.5f, -0.5f, 0f,
                 0.5f, -0.5f, 0f,
                 0f, 0.5f, 0f
             };
