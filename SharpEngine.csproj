@@ -20,6 +20,9 @@
     <None Update="libglfw.dylib">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Shaders\red-triangle.frag">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Shaders\red-triangle.vert">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
