@@ -1,8 +1,10 @@
 ﻿using System;
 using System.ComponentModel.Design;
 using System.IO;
+using System.Threading;
 using GLFW;
 using static OpenGL.Gl;
+using Monitor = GLFW.Monitor;
 
 namespace SharpEngine
 {
@@ -31,9 +33,22 @@ namespace SharpEngine
                 glClear(GL_COLOR_BUFFER_BIT);
                 glDrawArrays(GL_TRIANGLES, 0, 3);
                 glFlush();
-                Shrink();
                 UpdateTriangleBuffer();
+                RightAngle();
+                MoveDown();
+                Shrink();
+                if (vertices[7] <= 0)
+                {
+                    Grow();
+                }
             }
+        }
+
+        static void RightAngle()
+        {
+            vertices[0] = vertices[4];
+            vertices[3] = vertices[7];
+            vertices[6] = vertices[1];
         }
 
         static void MoveRight()
