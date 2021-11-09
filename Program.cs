@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.Design;
 using System.IO;
 using GLFW;
 using static OpenGL.Gl;
@@ -29,7 +30,8 @@ namespace SharpEngine
                 glClearColor(0.0f, 0.05f, 0.2f, 1);
                 glClear(GL_COLOR_BUFFER_BIT);
                 glDrawArrays(GL_TRIANGLES, 0, 3);
-                glFlush();
+                glFlush(); 
+                
                 UpdateTriangleBuffer();
             }
         }
@@ -46,6 +48,27 @@ namespace SharpEngine
             vertices [1] += -0.001f;
             vertices [4] += -0.001f;
             vertices [7] += -0.001f;
+        }
+
+        static void Shrink()
+        {
+            if (vertices[7]>0)
+            {
+                vertices[0] += 0.0001f;
+                vertices[1] += 0.0001f;
+                vertices[3] -= 0.0001f;
+                vertices[4] += 0.0001f;
+                vertices[7] -= 0.0001f;
+            }
+        }
+        
+        static void Grow()
+        {
+            vertices[0] -= 0.0001f;
+            vertices[1] -= 0.0001f;
+            vertices[3] += 0.0001f;
+            vertices[4] -= 0.0001f;
+            vertices[7] += 0.0001f;
         }
 
         static void CreateShaderProgram() {
