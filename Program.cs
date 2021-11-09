@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using GLFW;
 using OpenGL;
 using static OpenGL.Gl;
@@ -31,7 +32,6 @@ namespace SharpEngine
                 0f, 0.5f, 0f
             };
             
-
             // load vertices into a buffer
             var vertexArray = glGenVertexArray();
             var vertexBuffer = glGenBuffer();
@@ -48,30 +48,14 @@ namespace SharpEngine
             }
             glEnableVertexAttribArray(0);
 
-            string vertexShaderSource = @"#version 330 core
-                in vec3 pos;
-
-                void main()
-                {
-                   gl_Position = vec4(pos.x, pos.y, pos.z, 1.0);
-                }
-                ";
-            string fragmentShaderSource = @"
-                #version 330 core
-                out vec4 result;
-
-                void main()
-                {
-                    result = vec4(1, 0, 0, 1);
-                }
-                ";
+            
 
             var vertexShader = glCreateShader(GL_VERTEX_SHADER);
-            glShaderSource(vertexShader, vertexShaderSource);
+            glShaderSource(vertexShader, File.ReadAllText(("shaders/red_triangle.vert")));
             glCompileShader(vertexShader);
             
             var fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-            glShaderSource(fragmentShader, fragmentShaderSource);
+            glShaderSource(fragmentShader, File.ReadAllText(("shaders/red_triangle.frag")));
             glCompileShader(fragmentShader);
             
             var program = glCreateProgram();
