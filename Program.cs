@@ -1,5 +1,6 @@
 ﻿using System;
 using GLFW;
+using OpenGL;
 using static OpenGL.Gl;
 
 namespace SharpEngine
@@ -15,6 +16,7 @@ namespace SharpEngine
             Glfw.WindowHint(Hint.ContextVersionMinor, 3);
             Glfw.WindowHint(Hint.Decorated, true);
             Glfw.WindowHint(Hint.OpenglProfile, Profile.Core);
+            Glfw.WindowHint(Hint.Doublebuffer, Constants.False);
             //Glfw.WindowHint(Hint.OpenglForwardCompatible, Constants.True);
 
             // create and launch a window
@@ -45,17 +47,45 @@ namespace SharpEngine
                 glVertexAttribPointer(0 ,3, GL_FLOAT, false, 3 * sizeof(float), NULL);
             }
             glEnableVertexAttribArray(0);
+
+            string vertexShaderSource = @"#version 330 core
+                in vec3 pos;
+
+                void main()
+                {
+                   gl_Position = vec4(pos.x, pos.y, pos.z, 1.0);
+                }
+                ";
+            string fragmentShaderSource = @"
+                #version 330 core
+                out vec4 result;
+
+                void main()
+                {
+                    result = vec4(1, 0, 0, 1);
+                }
+                ";
+
+            var vertexShader = glCreateShader(GL_VERTEX_SHADER);
+            glShaderSource(vertexShader, vertexShaderSource);
+            glCompileShader(vertexShader);
             
+            var fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+            glShaderSource(fragmentShader, fragmentShaderSource);
+            glCompileShader(fragmentShader);
             
+            var program = glCreateProgram();
+            glAttachShader(program, vertexShader);
+            glAttachShader(program, fragmentShader);
+            glLinkProgram(program);
+            glUseProgram(program);
+
             // engine rendering loop
             while (!Glfw.WindowShouldClose(window))
             {
                 Glfw.PollEvents(); // react to window changes (position etc.)
                 glDrawArrays(GL_TRIANGLES, 0, 3);
-                //glDrawArrays(GL_LINE_LOOP, 0, 3);
-
-                Glfw.SwapBuffers(window);
-
+                glFlush();
             }
         }
 
