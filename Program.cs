@@ -12,11 +12,17 @@ namespace SharpEngine
     {
         static float[] vertices = new float[] {
             // vertex 1 x, y, z
-            -0.5f, -0.5f, 0f,
+            -.1f, -.1f, 0f,
             // vertex 2 x, y, z
-            0.5f, -0.5f, 0f,
+            .1f, -.1f, 0f,
             // vertex 3 x, y, z
-            0f, 0.5f, 0f
+            0f, .1f, 0f,
+            // vertex 4 x, y, z
+            .4f, .4f, 0f,
+            // vertex 5 x, y, z
+            .6f, .4f, 0f,
+            // vertex 6 x, y, z
+            .5f, .6f, 0f
         };
 
         const int vertexX = 0;
@@ -38,21 +44,23 @@ namespace SharpEngine
                 Render();
                 UpdateTriangleBuffer();
                 
-                RightAngle();
-                MoveDown();
-                Shrink();
-                if (vertices[7] <= 0)
+                //RightAngle();
+                //MoveDown();
+                //Shrink();
+                /*if (vertices[7] <= 0)
                 {
                     Grow();
-                }
+                }*/
             }
         }
 
         static void RightAngle()
         {
-            vertices[0] = vertices[4];
+            
+            vertices[vertexX] = vertices[Math.Abs(vertexX-1)];
+            /*vertices[0] = vertices[4];
             vertices[3] = vertices[7];
-            vertices[6] = vertices[1];
+            vertices[6] = vertices[2];*/
         }
 
         static void MoveRight()
@@ -79,23 +87,32 @@ namespace SharpEngine
 
         static void Shrink()
         {
-            if (vertices[7]>=0)
-            {
-                vertices[0] += 0.001f;
+            
+                for (var i = vertexY; i < vertices.Length; i += vertexSize)
+                {
+                    vertices[i] *= 1.000f-0.0001f;
+                }
+                
+                /*vertices[0] += 0.001f;
                 vertices[1] += 0.001f;
                 vertices[3] -= 0.001f;
                 vertices[4] += 0.001f;
-                vertices[7] -= 0.001f;
-            }
+                vertices[7] -= 0.001f;*/
+            
         }
         
         static void Grow()
         {
-            vertices[0] -= 0.001f;
+            for (var i = vertexY; i < vertices.Length; i += vertexSize)
+            {
+                vertices[i] *= 1.0000f+0.0001f;
+            }
+
+            /*vertices[0] -= 0.001f;
             vertices[1] -= 0.001f;
             vertices[3] += 0.001f;
             vertices[4] -= 0.001f;
-            vertices[7] += 0.001f;
+            vertices[7] += 0.001f;*/
         }
 
         static void Render()
@@ -107,7 +124,7 @@ namespace SharpEngine
         static void CreateShaderProgram() {
             // create vertex shader
             var vertexShader = glCreateShader(GL_VERTEX_SHADER);
-            glShaderSource(vertexShader, File.ReadAllText("shaders/screen_coordinates.vert"));
+            glShaderSource(vertexShader, File.ReadAllText("shaders/screen-coordinates.vert"));
             glCompileShader(vertexShader);
 
             // create fragment shader
