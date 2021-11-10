@@ -72,6 +72,8 @@ namespace SharpEngine
                 glClear(GL_COLOR_BUFFER_BIT);
                 Render(window);
                 UpdateTriangleBuffer();
+                
+                BackAndForth();
 
             }
         }
@@ -85,7 +87,7 @@ namespace SharpEngine
                 {
                     MoveRight();
                     vertices[i].x += 0.001f;
-                    MoveDown();
+                    MoveUp();
                     vertices[i].y += 0.001f;
                     if (vertices[1].x >= 1f)
                     {
@@ -97,13 +99,33 @@ namespace SharpEngine
             {
                 MoveLeft();
                 MoveDown();
+                
                 if (vertices[0].x <= -1f)
                 {
                     test = false;
                 }
             }
         }
-
+        
+        static void ScaleUpDown()
+        {
+            if (test == false)
+            {
+                Shrink();
+                //if (vertices[1].y >= 0.5f)
+                {
+                        test = true;
+                }
+            }
+            else
+            {
+                Grow();
+                //if (vertices[1].y <= 1f)
+                {
+                    test = false;
+                }
+            }
+        }
         static void Rotate()
         {
             for (var i = 0; i < vertices.Length; i++)
@@ -158,15 +180,19 @@ namespace SharpEngine
         {
             for (var i = 0; i < vertices.Length; i ++)
             {
-                vertices[i].x *= 1.0001f;
+                vertices[i].x *= 1.000f - 0.001f;
+                vertices[i].y *= 1.000f - 0.001f;
+
             }
         }
         
         static void Grow()
         {
-            for (var i = 0; i < vertices.Length; i ++)
+            for (var i = 0; i < vertices.Length; i++)
             {
-                vertices[i].x *= 1.0001f;
+                vertices[i].x *= 1.001f;;
+                vertices[i].y *= 1.001f;
+
             }
 
             /*vertices[0] -= 0.001f;
