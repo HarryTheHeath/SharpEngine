@@ -44,7 +44,10 @@ namespace SharpEngine
             new Vector(0f, 0.1f),
             new Vector(0.4f, 0.4f),
             new Vector(0.6f, 0.4f),
-            new Vector(0.5f, 0.6f)
+            new Vector(0.5f, 0.6f),
+            new Vector(-0.4f, -0.4f),
+            new Vector(-0.6f, -0.4f),
+            new Vector(-0.5f, -0.6f)
         };
         
         const int vertexSize = 3;
