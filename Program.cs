@@ -41,11 +41,11 @@ namespace SharpEngine
                 Glfw.PollEvents(); // react to window changes (position etc.)
                 glClearColor(0.2f, 0.05f, 0.2f, 1);
                 glClear(GL_COLOR_BUFFER_BIT);
-                Render();
+                Render(window);
                 UpdateTriangleBuffer();
-                
-                //RightAngle();
-                //MoveDown();
+
+                RightAngle();
+                MoveDown();
                 //Shrink();
                 /*if (vertices[7] <= 0)
                 {
@@ -115,10 +115,12 @@ namespace SharpEngine
             vertices[7] += 0.001f;*/
         }
 
-        static void Render()
+        static void Render(Window window)
         {
             glDrawArrays(GL_TRIANGLES, 0, vertices.Length/vertexSize);
             glFlush();
+            Glfw.SwapBuffers(window);
+
         }
 
         static void CreateShaderProgram() {
