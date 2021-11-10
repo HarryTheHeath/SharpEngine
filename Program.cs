@@ -8,27 +8,36 @@ using Monitor = GLFW.Monitor;
 
 namespace SharpEngine
 {
-    class Program
+    struct Vector
     {
-        struct Vector
+        public float x, y, z;
+
+        public Vector(float x, float y, float z)
         {
-            public float x, y, z;
+            this.x = x;
+            this.y = y;
+            this.z = z;
+        }
 
-            public Vector(float x, float y, float z)
-            {
-                this.x = x;
-                this.y = y;
-                this.z = z;
-            }
-
-            public Vector(float x, float y)
-            {
-                this.x = x;
-                this.y = y;
-                this.z = 0;
-            }
+        public Vector(float x, float y)
+        {
+            this.x = x;
+            this.y = y;
+            this.z = 0;
         }
         
+        
+        public static Vector operator *(Vector v, float f)
+        {
+            return new Vector(v.x * f, v.y * f, v.z * f);
+        }
+        
+        // +
+        // -
+        // /
+    }
+    class Program
+    {
         static Vector[] vertices = new Vector[] {
             new Vector(-0.1f, -0.1f),
             new Vector(0.1f, -0.1f),
@@ -37,9 +46,7 @@ namespace SharpEngine
             new Vector(0.6f, 0.4f),
             new Vector(0.5f, 0.6f)
         };
-
-        const int vertexX = 0;
-        private const int vertexY = 1;
+        
         const int vertexSize = 3;
         
         static void Main(string[] args) {
@@ -58,8 +65,6 @@ namespace SharpEngine
                 UpdateTriangleBuffer();
 
                 MoveRight();
-                MoveDown();
-                Grow();
             }
         }
 
@@ -71,7 +76,7 @@ namespace SharpEngine
             }
             
         }
-
+        
         static void MoveRight()
         {
             for (var i = 0; i < vertices.Length; i ++)
@@ -90,18 +95,17 @@ namespace SharpEngine
 
         static void Shrink()
         {
-            
-                for (var i = 0; i < vertices.Length; i ++)
-                {
-                    vertices[i].x *= 1.000f-0.0001f;
-                }
+            for (var i = 0; i < vertices.Length; i ++)
+            {
+                vertices[i].x *= 1.0001f;
+            }
         }
         
         static void Grow()
         {
             for (var i = 0; i < vertices.Length; i ++)
             {
-                vertices[i].x *= 1.000f+0.0001f;
+                vertices[i].x *= 1.0001f;
             }
 
             /*vertices[0] -= 0.001f;
