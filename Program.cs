@@ -20,6 +20,7 @@ namespace SharpEngine
         };
 
         const int vertexX = 0;
+        private const int vertexY = 1;
         const int vertexSize = 3;
         
         static void Main(string[] args) {
@@ -34,8 +35,7 @@ namespace SharpEngine
                 Glfw.PollEvents(); // react to window changes (position etc.)
                 glClearColor(0.2f, 0.05f, 0.2f, 1);
                 glClear(GL_COLOR_BUFFER_BIT);
-                glDrawArrays(GL_TRIANGLES, 0, 3);
-                glFlush();
+                Render();
                 UpdateTriangleBuffer();
                 
                 RightAngle();
@@ -68,9 +68,13 @@ namespace SharpEngine
 
         static void MoveDown()
         {
-            vertices [1] += -0.0001f;
+            for (var i = vertexY; i < vertices.Length; i += vertexSize)
+            {
+                vertices[i] -= 0.0001f;
+            }
+            /*vertices [1] += -0.0001f;
             vertices [4] += -0.0001f;
-            vertices [7] += -0.0001f;
+            vertices [7] += -0.0001f;*/
         }
 
         static void Shrink()
@@ -94,15 +98,21 @@ namespace SharpEngine
             vertices[7] += 0.001f;
         }
 
+        static void Render()
+        {
+            glDrawArrays(GL_TRIANGLES, 0, vertices.Length/vertexSize);
+            glFlush();
+        }
+
         static void CreateShaderProgram() {
             // create vertex shader
             var vertexShader = glCreateShader(GL_VERTEX_SHADER);
-            glShaderSource(vertexShader, File.ReadAllText("shaders/red-triangle.vert"));
+            glShaderSource(vertexShader, File.ReadAllText("shaders/screen_coordinates.vert"));
             glCompileShader(vertexShader);
 
             // create fragment shader
             var fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-            glShaderSource(fragmentShader, File.ReadAllText("shaders/red-triangle.frag"));
+            glShaderSource(fragmentShader, File.ReadAllText("shaders/green-triangle.frag"));
             glCompileShader(fragmentShader);
 
             // create shader program - rendering pipeline
@@ -121,7 +131,7 @@ namespace SharpEngine
             glBindVertexArray(vertexArray);
             glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
             UpdateTriangleBuffer();
-            glVertexAttribPointer(0, 3, GL_FLOAT, false, 3 * sizeof(float), NULL);
+            glVertexAttribPointer(0, vertexSize, GL_FLOAT, false, vertexSize * sizeof(float), NULL);
 
             glEnableVertexAttribArray(0);
         }
