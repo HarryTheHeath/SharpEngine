@@ -42,17 +42,22 @@ namespace SharpEngine
             new Vector(-0.1f, -0.1f),
             new Vector(0.1f, -0.1f),
             new Vector(0f, 0.1f),
-            new Vector(0.4f, 0.4f),
-            new Vector(0.6f, 0.4f),
-            new Vector(0.5f, 0.6f),
-            new Vector(-0.4f, -0.4f),
-            new Vector(-0.6f, -0.4f),
-            new Vector(-0.5f, -0.6f)
+            new Vector(0.1f, 0.1f),
+            new Vector(0.3f, 0.1f),
+            new Vector(0.2f, 0.3f),
+            new Vector(-0.3f, -0.3f),
+            new Vector(-0.1f, -0.3f),
+            new Vector(-0.2f, -0.1f)
         };
         
         const int vertexSize = 3;
+        static bool test;
+
         
-        static void Main(string[] args) {
+
+        static void Main(string[] args)
+        {
+            
             var window = CreateWindow();
 
             LoadTriangleIntoBuffer();
@@ -60,16 +65,54 @@ namespace SharpEngine
             CreateShaderProgram();
 
             // engine rendering loop
-            while (!Glfw.WindowShouldClose(window)) {
+            while (!Glfw.WindowShouldClose(window))
+            {
                 Glfw.PollEvents(); // react to window changes (position etc.)
                 glClearColor(0.2f, 0.05f, 0.2f, 1);
                 glClear(GL_COLOR_BUFFER_BIT);
                 Render(window);
                 UpdateTriangleBuffer();
+                
+                
+                for (var i = 0; i < vertices.Length; i++)
+                {
+                    vertices[i].x = (float)(vertices[i].x * Math.Cos(0.01f) + vertices[i].y * Math.Sin(0.01f));
+                    vertices[i].y = (float)(vertices[i].y * Math.Cos(0.01f) - vertices[i].x * Math.Sin(0.01f));  
+                }
+                
+                    
+                /*if (test == false)
+                {
+                    
+                    for (var i = 0; i < vertices.Length; i ++)
+                    {
+                        //MoveRight
+                        vertices[i].x += 0.001f;
+                        //MoveDown
+                        vertices[i].y += 0.001f;
+                    }
 
-                MoveRight();
+                    if (vertices[1].x >= 1f)
+                    {
+                        test = true;
+                    }
+                }
+                else
+                {
+                    MoveLeft();
+                    // vertices[i].x -= 0.001f;
+                    MoveDown();
+                    // vertices[i].y -= 0.001f;
+                    
+                    if (vertices[0].x <= -1f)
+                    {
+                        test = false;
+                    }
+                }*/
+
             }
         }
+        
 
         static void RightAngle()
         {
@@ -84,7 +127,15 @@ namespace SharpEngine
         {
             for (var i = 0; i < vertices.Length; i ++)
             {
-                vertices[i].x += 0.0001f;
+                vertices[i].x += 0.001f;
+            }
+        }
+        
+        static void MoveLeft()
+        {
+            for (var i = 0; i < vertices.Length; i ++)
+            {
+                vertices[i].x -= 0.001f;
             }
         }
 
@@ -92,7 +143,15 @@ namespace SharpEngine
         {
             for (var i = 0; i < vertices.Length; i ++)
             {
-                vertices[i].x -= 0.0001f;
+                vertices[i].y -= 0.001f;
+            }
+        }
+        
+        static void MoveUp()
+        {
+            for (var i = 0; i < vertices.Length; i ++)
+            {
+                vertices[i].y += 0.001f;
             }
         }
 
