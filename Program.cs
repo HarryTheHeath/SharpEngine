@@ -72,47 +72,46 @@ namespace SharpEngine
                 glClear(GL_COLOR_BUFFER_BIT);
                 Render(window);
                 UpdateTriangleBuffer();
-                
-                
+
+            }
+        }
+
+        static void BackAndForth()
+        {
+            if (test == false)
+            {
+
                 for (var i = 0; i < vertices.Length; i++)
                 {
-                    vertices[i].x = (float)(vertices[i].x * Math.Cos(0.01f) + vertices[i].y * Math.Sin(0.01f));
-                    vertices[i].y = (float)(vertices[i].y * Math.Cos(0.01f) - vertices[i].x * Math.Sin(0.01f));  
-                }
-                
-                    
-                /*if (test == false)
-                {
-                    
-                    for (var i = 0; i < vertices.Length; i ++)
-                    {
-                        //MoveRight
-                        vertices[i].x += 0.001f;
-                        //MoveDown
-                        vertices[i].y += 0.001f;
-                    }
-
+                    MoveRight();
+                    vertices[i].x += 0.001f;
+                    MoveDown();
+                    vertices[i].y += 0.001f;
                     if (vertices[1].x >= 1f)
                     {
                         test = true;
                     }
                 }
-                else
+            }
+            else
+            {
+                MoveLeft();
+                MoveDown();
+                if (vertices[0].x <= -1f)
                 {
-                    MoveLeft();
-                    // vertices[i].x -= 0.001f;
-                    MoveDown();
-                    // vertices[i].y -= 0.001f;
-                    
-                    if (vertices[0].x <= -1f)
-                    {
-                        test = false;
-                    }
-                }*/
-
+                    test = false;
+                }
             }
         }
-        
+
+        static void Rotate()
+        {
+            for (var i = 0; i < vertices.Length; i++)
+            {
+                vertices[i].x = (float)(vertices[i].x * Math.Cos(0.01f) + vertices[i].y * Math.Sin(0.01f));
+                vertices[i].y = (float)(vertices[i].y * Math.Cos(0.01f) - vertices[i].x * Math.Sin(0.01f));  
+            }
+        }
 
         static void RightAngle()
         {
