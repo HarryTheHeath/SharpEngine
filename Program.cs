@@ -18,6 +18,9 @@ namespace SharpEngine
             // vertex 3 x, y, z
             0f, 0.5f, 0f
         };
+
+        const int vertexX = 0;
+        const int vertexSize = 3;
         
         static void Main(string[] args) {
             var window = CreateWindow();
@@ -34,6 +37,7 @@ namespace SharpEngine
                 glDrawArrays(GL_TRIANGLES, 0, 3);
                 glFlush();
                 UpdateTriangleBuffer();
+                
                 RightAngle();
                 MoveDown();
                 Shrink();
@@ -53,9 +57,13 @@ namespace SharpEngine
 
         static void MoveRight()
         {
-            vertices[0] += 0.0001f;
+            for (var i = vertexX; i < vertices.Length; i += vertexSize)
+            {
+                vertices[i] += 0.0001f;
+            }
+            /*vertices[0] += 0.0001f;
             vertices[3] += 0.0001f;
-            vertices[6] += 0.0001f;
+            vertices[6] += 0.0001f;*/
         }
 
         static void MoveDown()
