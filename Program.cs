@@ -10,19 +10,32 @@ namespace SharpEngine
 {
     class Program
     {
-        static float[] vertices = new float[] {
-            // vertex 1 x, y, z
-            -.1f, -.1f, 0f,
-            // vertex 2 x, y, z
-            .1f, -.1f, 0f,
-            // vertex 3 x, y, z
-            0f, .1f, 0f,
-            // vertex 4 x, y, z
-            .4f, .4f, 0f,
-            // vertex 5 x, y, z
-            .6f, .4f, 0f,
-            // vertex 6 x, y, z
-            .5f, .6f, 0f
+        struct Vector
+        {
+            public float x, y, z;
+
+            public Vector(float x, float y, float z)
+            {
+                this.x = x;
+                this.y = y;
+                this.z = z;
+            }
+
+            public Vector(float x, float y)
+            {
+                this.x = x;
+                this.y = y;
+                this.z = 0;
+            }
+        }
+        
+        static Vector[] vertices = new Vector[] {
+            new Vector(-0.1f, -0.1f),
+            new Vector(0.1f, -0.1f),
+            new Vector(0f, 0.1f),
+            new Vector(0.4f, 0.4f),
+            new Vector(0.6f, 0.4f),
+            new Vector(0.5f, 0.6f)
         };
 
         const int vertexX = 0;
@@ -44,68 +57,51 @@ namespace SharpEngine
                 Render(window);
                 UpdateTriangleBuffer();
 
-                RightAngle();
+                MoveRight();
                 MoveDown();
-                //Shrink();
-                /*if (vertices[7] <= 0)
-                {
-                    Grow();
-                }*/
+                Grow();
             }
         }
 
         static void RightAngle()
         {
+            for (var i = 0; i < vertices.Length; i++)
+            {
+                //vertices[i].x = vertices[Math.Abs(vertices[i].x -1)];
+            }
             
-            vertices[vertexX] = vertices[Math.Abs(vertexX-1)];
-            /*vertices[0] = vertices[4];
-            vertices[3] = vertices[7];
-            vertices[6] = vertices[2];*/
         }
 
         static void MoveRight()
         {
-            for (var i = vertexX; i < vertices.Length; i += vertexSize)
+            for (var i = 0; i < vertices.Length; i ++)
             {
-                vertices[i] += 0.0001f;
+                vertices[i].x += 0.0001f;
             }
-            /*vertices[0] += 0.0001f;
-            vertices[3] += 0.0001f;
-            vertices[6] += 0.0001f;*/
         }
 
         static void MoveDown()
         {
-            for (var i = vertexY; i < vertices.Length; i += vertexSize)
+            for (var i = 0; i < vertices.Length; i ++)
             {
-                vertices[i] -= 0.0001f;
+                vertices[i].x -= 0.0001f;
             }
-            /*vertices [1] += -0.0001f;
-            vertices [4] += -0.0001f;
-            vertices [7] += -0.0001f;*/
         }
 
         static void Shrink()
         {
             
-                for (var i = vertexY; i < vertices.Length; i += vertexSize)
+                for (var i = 0; i < vertices.Length; i ++)
                 {
-                    vertices[i] *= 1.000f-0.0001f;
+                    vertices[i].x *= 1.000f-0.0001f;
                 }
-                
-                /*vertices[0] += 0.001f;
-                vertices[1] += 0.001f;
-                vertices[3] -= 0.001f;
-                vertices[4] += 0.001f;
-                vertices[7] -= 0.001f;*/
-            
         }
         
         static void Grow()
         {
-            for (var i = vertexY; i < vertices.Length; i += vertexSize)
+            for (var i = 0; i < vertices.Length; i ++)
             {
-                vertices[i] *= 1.0000f+0.0001f;
+                vertices[i].x *= 1.000f+0.0001f;
             }
 
             /*vertices[0] -= 0.001f;
@@ -117,7 +113,7 @@ namespace SharpEngine
 
         static void Render(Window window)
         {
-            glDrawArrays(GL_TRIANGLES, 0, vertices.Length/vertexSize);
+            glDrawArrays(GL_TRIANGLES, 0, vertices.Length);
             glFlush();
             Glfw.SwapBuffers(window);
 
@@ -156,8 +152,8 @@ namespace SharpEngine
         }
         
         static unsafe void UpdateTriangleBuffer() {
-            fixed (float* vertex = &vertices[0]) {
-                glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertices.Length, vertex, GL_STATIC_DRAW);
+            fixed (Vector* vertex = &vertices[0]) {
+                glBufferData(GL_ARRAY_BUFFER, sizeof(Vector) * vertices.Length, vertex, GL_STATIC_DRAW);
             }
         }
 
