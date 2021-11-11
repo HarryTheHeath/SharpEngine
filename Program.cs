@@ -101,32 +101,12 @@ namespace SharpEngine
                 UpdateTriangleBuffer();
             }
         }
-
         static void BackAndForth()
         
         {
            
         }
-        
-        static void ScaleUpDown()
-        {
-            if (test == false)
-            {
-                Shrink();
-                //if (vertices[1].y >= 0.5f)
-                {
-                        test = true;
-                }
-            }
-            else
-            {
-                Grow();
-                //if (vertices[1].y <= 1f)
-                {
-                    test = false;
-                }
-            }
-        }
+       
         static void Rotate()
         {
             for (var i = 0; i < vertices.Length; i++)
@@ -136,56 +116,6 @@ namespace SharpEngine
             }
         }
 
-        static void MoveRight()
-        {
-            for (var i = 0; i < vertices.Length; i ++)
-            {
-                vertices[i].x += 0.001f;
-            }
-        }
-        
-        static void MoveLeft()
-        {
-            for (var i = 0; i < vertices.Length; i ++)
-            {
-                vertices[i].x -= 0.001f;
-            }
-        }
-
-        static void MoveDown()
-        {
-            for (var i = 0; i < vertices.Length; i ++)
-            {
-                vertices[i].y -= 0.001f;
-            }
-        }
-        
-        static void MoveUp()
-        {
-            for (var i = 0; i < vertices.Length; i ++)
-            {
-                vertices[i].y += 0.001f;
-            }
-        }
-
-        static void Shrink()
-        {
-            for (var i = 0; i < vertices.Length; i ++)
-            {
-                vertices[i].x *= 1.000f - 0.001f;
-                vertices[i].y *= 1.000f - 0.001f;
-            }
-        }
-        
-        static void Grow()
-        {
-            for (var i = 0; i < vertices.Length; i++)
-            {
-                vertices[i].x *= 1.001f;;
-                vertices[i].y *= 1.001f;
-
-            }
-        }
         private static void ClearScreen() {
             glClearColor(0.2f, 0f, 0.2f, 1);
             glClear(GL_COLOR_BUFFER_BIT);
