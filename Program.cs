@@ -1,7 +1,9 @@
 ﻿using System;
 using System.ComponentModel.Design;
+using System.Drawing;
 using System.IO;
 using System.Numerics;
+using System.Runtime.InteropServices;
 using System.Threading;
 using GLFW;
 using static OpenGL.Gl;
@@ -11,20 +13,15 @@ namespace SharpEngine
 {
     class Program
     {
-        public struct Vertex {
-            public Vector position;
-
-            public Vertex(Vector position) {
-                this.position = position;
-            }
+        public class Triangle
+        {
+            
         }
-        
         static Vertex[] vertices = new Vertex[] {
-            new Vertex(new Vector(0f, 0f)),
-            new Vertex(new Vector(1f, 0f)),
-            new Vertex(new Vector(0f, 1f))
+            new Vertex(new Vector(0f, 0f), Color.Red),
+            new Vertex(new Vector(1f, 0f), Color.Green),
+            new Vertex(new Vector(0f, 1f), Color.Blue),
         };
-        
         
         /*static Vector[] vertices = new Vector[] {
             new Vector(-0.1f, -0.1f),
@@ -146,12 +143,12 @@ namespace SharpEngine
         static void CreateShaderProgram() {
             // create vertex shader
             var vertexShader = glCreateShader(GL_VERTEX_SHADER);
-            glShaderSource(vertexShader, File.ReadAllText("shaders/screen-coordinates.vert"));
+            glShaderSource(vertexShader, File.ReadAllText("Shaders/position-color.vert"));
             glCompileShader(vertexShader);
 
             // create fragment shader
             var fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-            glShaderSource(fragmentShader, File.ReadAllText("shaders/green-triangle.frag"));
+            glShaderSource(fragmentShader, File.ReadAllText("Shaders/vertex-color.frag"));
             glCompileShader(fragmentShader);
 
             // create shader program - rendering pipeline
@@ -163,16 +160,17 @@ namespace SharpEngine
         }
 
         static unsafe void LoadTriangleIntoBuffer() {
-
             // load the vertices into a buffer
             var vertexArray = glGenVertexArray();
             var vertexBuffer = glGenBuffer();
             glBindVertexArray(vertexArray);
             glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
             UpdateTriangleBuffer();
-            glVertexAttribPointer(0, vertexSize, GL_FLOAT, false, vertexSize * sizeof(float), NULL);
-
+            glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(Vertex), Marshal.OffsetOf(typeof(Vertex), nameof(Vertex.position)));
+            glVertexAttribPointer(1, 4, GL_FLOAT, false, sizeof(Vertex), Marshal.OffsetOf(typeof(Vertex), nameof(Vertex.color)));
             glEnableVertexAttribArray(0);
+            glEnableVertexAttribArray(1);
+
         }
         
         static unsafe void UpdateTriangleBuffer() {
