@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.Design;
 using System.IO;
+using System.Numerics;
 using System.Threading;
 using GLFW;
 using static OpenGL.Gl;
@@ -32,9 +33,26 @@ namespace SharpEngine
             return new Vector(v.x * f, v.y * f, v.z * f);
         }
         
+        public static Vector operator /(Vector v, float f)
+        {
+            return new Vector(v.x / f, v.y / f, v.z / f);
+        }
+        
         public static Vector operator +(Vector lhs, Vector rhs) 
         {
             return new Vector(lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z);
+        }
+        
+        public static Vector operator -(Vector lhs, Vector rhs) 
+        {
+            return new Vector(lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z);
+        }
+        
+        public static Vector Max(Vector a, Vector b) {
+            return new Vector(MathF.Max(a.x, b.x), MathF.Max(a.y, b.y), MathF.Max(a.z, b.z));
+        }
+        public static Vector Min(Vector a, Vector b) {
+            return new Vector(MathF.Min(a.x, b.x), MathF.Min(a.y, b.y), MathF.Min(a.z, b.z));
         }
     }
     class Program
@@ -43,12 +61,12 @@ namespace SharpEngine
             new Vector(-0.1f, -0.1f),
             new Vector(0.1f, -0.1f),
             new Vector(0f, 0.1f),
-            new Vector(0.1f, 0.1f),
+            /*new Vector(0.1f, 0.1f),
             new Vector(0.3f, 0.1f),
             new Vector(0.2f, 0.3f),
             new Vector(-0.3f, -0.3f),
             new Vector(-0.1f, -0.3f),
-            new Vector(-0.2f, -0.1f)
+            new Vector(-0.2f, -0.1f)*/
         };
         
         const int vertexSize = 3;
@@ -58,6 +76,8 @@ namespace SharpEngine
         {
             var window = CreateWindow();
             var direction = new Vector(0.001f, 0.001f);
+            var multiplier = 0.9999f;
+            float scale = 1f;
 
             LoadTriangleIntoBuffer();
             CreateShaderProgram();
@@ -68,23 +88,50 @@ namespace SharpEngine
                 Glfw.PollEvents(); // react to window changes (position etc.)
                 ClearScreen();
                 Render(window);
-                
-                for (var i = 0; i < vertices.Length; i++) {
-                    vertices[i] += direction;
+                var min = vertices[0];
+                var max = vertices[0];
+                var center = (min + max) / 2;
+
+
+                for (var i = 0; i < vertices.Length; i++)
+                {
+                    min = Vector.Min(min, vertices[i]);
+
+                    //*vertices[i] += direction;
                 }
 
                 for (var i = 0; i < vertices.Length; i++) {
-                    if (vertices[i].x >= 1 || vertices[i].x <= -1) {
+                    max = Vector.Max(max, vertices[i]);
+
+                    
+                    /*if (vertices[i].x >= 1 || vertices[i].x <= -1) {
                         direction.x *= -1;
                         break;
-                    }
+                    }*/
                 }
                 
                 for (var i = 0; i < vertices.Length; i++) {
-                    if (vertices[i].y >= 1 || vertices[i].y <= -1) {
+                    vertices[i] -= center;
+                    
+                    /*if (vertices[i].y >= 1 || vertices[i].y <= -1) {
                         direction.y *= -1;
                         break;
-                    }
+                    }*/
+                }
+                
+                for (var i = 0; i < vertices.Length; i++) {
+                    vertices[i] *= multiplier;
+                }
+                for (var i = 0; i < vertices.Length; i++) {
+                    vertices[i] += center;
+                }
+                
+                scale *= multiplier;
+                if (scale <= 0.5f) {
+                    multiplier = 1.001f;
+                }
+                if (scale >= 1f) {
+                    multiplier = 0.999f;
                 }
                 UpdateTriangleBuffer();
             }
