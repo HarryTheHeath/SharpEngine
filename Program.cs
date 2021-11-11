@@ -32,9 +32,10 @@ namespace SharpEngine
             return new Vector(v.x * f, v.y * f, v.z * f);
         }
         
-        // +
-        // -
-        // /
+        public static Vector operator +(Vector lhs, Vector rhs) 
+        {
+            return new Vector(lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z);
+        }
     }
     class Program
     {
@@ -52,59 +53,47 @@ namespace SharpEngine
         
         const int vertexSize = 3;
         static bool test;
-
         
-
         static void Main(string[] args)
         {
-            
             var window = CreateWindow();
+            var direction = new Vector(0.001f, 0.001f);
 
             LoadTriangleIntoBuffer();
-
             CreateShaderProgram();
 
             // engine rendering loop
             while (!Glfw.WindowShouldClose(window))
             {
                 Glfw.PollEvents(); // react to window changes (position etc.)
-                glClearColor(0.2f, 0.05f, 0.2f, 1);
-                glClear(GL_COLOR_BUFFER_BIT);
+                ClearScreen();
                 Render(window);
-                UpdateTriangleBuffer();
                 
-                BackAndForth();
+                for (var i = 0; i < vertices.Length; i++) {
+                    vertices[i] += direction;
+                }
 
+                for (var i = 0; i < vertices.Length; i++) {
+                    if (vertices[i].x >= 1 || vertices[i].x <= -1) {
+                        direction.x *= -1;
+                        break;
+                    }
+                }
+                
+                for (var i = 0; i < vertices.Length; i++) {
+                    if (vertices[i].y >= 1 || vertices[i].y <= -1) {
+                        direction.y *= -1;
+                        break;
+                    }
+                }
+                UpdateTriangleBuffer();
             }
         }
 
         static void BackAndForth()
+        
         {
-            if (test == false)
-            {
-
-                for (var i = 0; i < vertices.Length; i++)
-                {
-                    MoveRight();
-                    vertices[i].x += 0.001f;
-                    MoveUp();
-                    vertices[i].y += 0.001f;
-                    if (vertices[1].x >= 1f)
-                    {
-                        test = true;
-                    }
-                }
-            }
-            else
-            {
-                MoveLeft();
-                MoveDown();
-                
-                if (vertices[0].x <= -1f)
-                {
-                    test = false;
-                }
-            }
+           
         }
         
         static void ScaleUpDown()
@@ -135,15 +124,6 @@ namespace SharpEngine
             }
         }
 
-        static void RightAngle()
-        {
-            for (var i = 0; i < vertices.Length; i++)
-            {
-                //vertices[i].x = vertices[Math.Abs(vertices[i].x -1)];
-            }
-            
-        }
-        
         static void MoveRight()
         {
             for (var i = 0; i < vertices.Length; i ++)
@@ -182,7 +162,6 @@ namespace SharpEngine
             {
                 vertices[i].x *= 1.000f - 0.001f;
                 vertices[i].y *= 1.000f - 0.001f;
-
             }
         }
         
@@ -194,14 +173,11 @@ namespace SharpEngine
                 vertices[i].y *= 1.001f;
 
             }
-
-            /*vertices[0] -= 0.001f;
-            vertices[1] -= 0.001f;
-            vertices[3] += 0.001f;
-            vertices[4] -= 0.001f;
-            vertices[7] += 0.001f;*/
         }
-
+        private static void ClearScreen() {
+            glClearColor(0.2f, 0f, 0.2f, 1);
+            glClear(GL_COLOR_BUFFER_BIT);
+        }
         static void Render(Window window)
         {
             glDrawArrays(GL_TRIANGLES, 0, vertices.Length);
