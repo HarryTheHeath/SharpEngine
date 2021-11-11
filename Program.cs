@@ -61,12 +61,12 @@ namespace SharpEngine
             new Vector(-0.1f, -0.1f),
             new Vector(0.1f, -0.1f),
             new Vector(0f, 0.1f),
-            /*new Vector(0.1f, 0.1f),
+            new Vector(0.1f, 0.1f),
             new Vector(0.3f, 0.1f),
             new Vector(0.2f, 0.3f),
             new Vector(-0.3f, -0.3f),
             new Vector(-0.1f, -0.3f),
-            new Vector(-0.2f, -0.1f)*/
+            new Vector(-0.2f, -0.1f)
         };
         
         const int vertexSize = 3;
@@ -77,7 +77,7 @@ namespace SharpEngine
             var window = CreateWindow();
             var direction = new Vector(0.001f, 0.001f);
             var multiplier = 0.9999f;
-            float scale = 1f;
+            float scale = 2f;
 
             LoadTriangleIntoBuffer();
             CreateShaderProgram();
@@ -88,50 +88,61 @@ namespace SharpEngine
                 Glfw.PollEvents(); // react to window changes (position etc.)
                 ClearScreen();
                 Render(window);
-                var min = vertices[0];
-                var max = vertices[0];
-                var center = (min + max) / 2;
-
-
-                for (var i = 0; i < vertices.Length; i++)
-                {
-                    min = Vector.Min(min, vertices[i]);
-
-                    //*vertices[i] += direction;
-                }
-
-                for (var i = 0; i < vertices.Length; i++) {
-                    max = Vector.Max(max, vertices[i]);
-
-                    
-                    /*if (vertices[i].x >= 1 || vertices[i].x <= -1) {
-                        direction.x *= -1;
-                        break;
-                    }*/
-                }
                 
+                // 1. Scale the Triangle without Moving it
+                
+                // 1.1 Move the Triangle to the Center, so we can scale it without Side Effects
+                // 1.1.1 Find the Center of the Triangle
+                // 1.1.1.1 Find the Minimum and Maximum
+                var min = vertices[0];
+                for (var i = 1; i < vertices.Length; i++) {
+                    min = Vector.Min(min, vertices[i]);
+                }
+                var max = vertices[0];
+                for (var i = 1; i < vertices.Length; i++) {
+                    max = Vector.Max(max, vertices[i]);
+                }
+                // 1.1.1.2 Average out the Minimum and Maximum to get the Center
+                var center = (min + max) / 2;
+                // 1.1.2 Move the Triangle the Center
                 for (var i = 0; i < vertices.Length; i++) {
                     vertices[i] -= center;
-                    
-                    /*if (vertices[i].y >= 1 || vertices[i].y <= -1) {
-                        direction.y *= -1;
-                        break;
-                    }*/
                 }
-                
+                // 1.2 Scale the Triangle
                 for (var i = 0; i < vertices.Length; i++) {
                     vertices[i] *= multiplier;
                 }
+                // 1.3 Move the Triangle Back to where it was before
                 for (var i = 0; i < vertices.Length; i++) {
                     vertices[i] += center;
                 }
                 
+                // 2. Keep track of the Scale, so we can reverse it
                 scale *= multiplier;
                 if (scale <= 0.5f) {
                     multiplier = 1.001f;
                 }
                 if (scale >= 1f) {
                     multiplier = 0.999f;
+                }
+
+                // 3. Move the Triangle by its Direction
+                for (var i = 0; i < vertices.Length; i++) {
+                    vertices[i] += direction;
+                }
+                // 4. Check the X-Bounds of the Screen
+                for (var i = 0; i < vertices.Length; i++) {
+                    if (vertices[i].x >= 1 && direction.x > 0 || vertices[i].x <= -1 && direction.x < 0) {
+                        direction.x *= -1;
+                        break;
+                    }
+                }
+                // 5. Check the Y-Bounds of the Screen
+                for (var i = 0; i < vertices.Length; i++) {
+                    if (vertices[i].y >= 1 && direction.y > 0 || vertices[i].y <= -1 && direction.y < 0) {
+                        direction.y *= -1;
+                        break;
+                    }
                 }
                 UpdateTriangleBuffer();
             }
