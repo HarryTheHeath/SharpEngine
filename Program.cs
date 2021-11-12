@@ -8,27 +8,11 @@ using Monitor = GLFW.Monitor;
 
 namespace SharpEngine
 {
-    
-    public class Rectangle : Shape
-    {
-        public Rectangle(float width, float height, Vector position, Color[] color) : base(new Vertex[6])
-        {
-            vertices[0] = new Vertex(new Vector(position.x - width / 2, position.y - height / 2), color[0]);
-            vertices[1] = new Vertex(new Vector(position.x + width / 2, position.y - height / 2), color[1]);
-            vertices[2] = new Vertex(new Vector(position.x - width / 2, position.y + height / 2), color[2]);
-            vertices[3] = new Vertex(new Vector(position.x + width / 2, position.y + height/ 2), color[3]);
-            vertices[4] = new Vertex(new Vector(position.x - width / 2, position.y + height/ 2), color[4]);
-            vertices[5] = new Vertex(new Vector(position.x + width / 2, position.y - height/ 2), color[5]);
-        }
-    }
-    
     class Program
     {
-        
         private static Shape rectangle = new Rectangle(0.2f, 0.2f, new Vector(0.2f, 0.2f), 
             new Color[] {new Color(1, 1, 0, 1), new Color(0, 1, 1, 1), new Color(1, 0, 1, 1), 
                                 new Color(0, 0, 1, 1), new Color(0, 1, 0, 1), new Color(1, 0, 1, 1)});
-        
         
         private static Shape triangle = new Triangle(0.2f, 0.2f, new Vector(0, 0), 
             new Color[] {new Color(1, 0, 0, 1), new Color(0, 1, 0, 1), new Color(0, 0, 1, 1)});
@@ -40,8 +24,8 @@ namespace SharpEngine
         {
             var window = CreateWindow();
             CreateShaderProgram();
-            var direction = new Vector(0.0003f, 0.0003f);
-            var multiplier = 0.999f;
+            var direction = new Vector(0.01f, 0.01f);
+            var multiplier = 0.99f;
             
             // engine rendering loop
             while (!Glfw.WindowShouldClose(window))
@@ -53,7 +37,6 @@ namespace SharpEngine
                 triangle.Scale(multiplier);
                 triangle2.Scale(multiplier);
                 rectangle.Scale(multiplier);
-
                 
                 // 2. Keep track of the Scale, so we can reverse it
                 if (triangle.CurrentScale <= 0.5f) {
@@ -67,16 +50,26 @@ namespace SharpEngine
                 triangle.Move(direction);
                 triangle2.Move(direction);
                 rectangle.Move(direction);
-
-
                 
                 // 4. Check the X-Bounds of the Screen
                 if (triangle.GetMaxBounds().x >= 1 && direction.x > 0 || triangle.GetMinBounds().x <= -1 && direction.x < 0) {
                     direction.x *= -1;
                 }
+                if (triangle2.GetMaxBounds().x >= 1 && direction.x > 0 || triangle2.GetMinBounds().x <= -1 && direction.x < 0) {
+                    direction.x *= -1;
+                }
+                if (rectangle.GetMaxBounds().x >= 1 && direction.x > 0 || triangle2.GetMinBounds().x <= -1 && direction.x < 0) {
+                    direction.x *= -1;
+                }
                 
                 // 5. Check the Y-Bounds of the Screen
                 if (triangle.GetMaxBounds().y >= 1 && direction.y > 0 || triangle.GetMinBounds().y <= -1 && direction.y < 0) {
+                    direction.y *= -1;
+                }
+                if (triangle2.GetMaxBounds().y >= 1 && direction.y > 0 || triangle2.GetMinBounds().y <= -1 && direction.y < 0) {
+                    direction.y *= -1;
+                }
+                if (rectangle.GetMaxBounds().y >= 1 && direction.y > 0 || rectangle.GetMinBounds().y <= -1 && direction.y < 0) {
                     direction.y *= -1;
                 }
                 
