@@ -2,20 +2,22 @@
 using System.Runtime.InteropServices;
 using OpenGL;
 using static OpenGL.Gl;
+using Monitor = GLFW.Monitor;
+
 
 namespace SharpEngine
 {
     public class Triangle
     {
 
-        Vertex[] vertices;
-
+        private Vertex[] vertices;
         public float CurrentScale { get; private set; }
 
         public Triangle(Vertex[] vertices)
         {
             this.vertices = vertices;
-            this.CurrentScale = 1f;
+            CurrentScale = 1f;
+            LoadTriangleIntoBuffer();
         }
 
         public Vector GetMinBounds()
@@ -25,7 +27,6 @@ namespace SharpEngine
             {
                 min = Vector.Min(min, this.vertices[i].position);
             }
-
             return min;
         }
 
@@ -36,7 +37,6 @@ namespace SharpEngine
             {
                 max = Vector.Max(max, this.vertices[i].position);
             }
-
             return max;
         }
 
@@ -72,7 +72,7 @@ namespace SharpEngine
 
         public unsafe void Render()
         {
-            fixed (Vertex* vertex = &this.vertices[0])
+            fixed (Vertex* vertex = &vertices[0])
             {
                 Gl.glBufferData(Gl.GL_ARRAY_BUFFER, sizeof(Vertex) * this.vertices.Length, vertex, Gl.GL_DYNAMIC_DRAW);
             }
@@ -80,7 +80,7 @@ namespace SharpEngine
             Gl.glDrawArrays(Gl.GL_TRIANGLES, 0, this.vertices.Length);
         }
         
-        static unsafe void LoadTriangleIntoBuffer() {
+        private static unsafe void LoadTriangleIntoBuffer() {
             var vertexArray = glGenVertexArray();
             var vertexBuffer = glGenBuffer();
             glBindVertexArray(vertexArray);

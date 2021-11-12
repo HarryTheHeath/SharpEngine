@@ -1,11 +1,8 @@
 ﻿using System;
-using System.ComponentModel.Design;
-using System.Drawing;
 using System.IO;
-using System.Numerics;
 using System.Runtime.InteropServices;
-using System.Threading;
 using GLFW;
+using OpenGL;
 using static OpenGL.Gl;
 using Monitor = GLFW.Monitor;
 
@@ -13,10 +10,17 @@ namespace SharpEngine
 {
     class Program
     {
-        static Triangle triangle = new Triangle(new Vertex[] {
+        private static Triangle triangle = new Triangle(new Vertex[] {
             new Vertex(new Vector(0f, 0f), Color.Red),
             new Vertex(new Vector(1f, 0f), Color.Green),
             new Vertex(new Vector(0f, 1f), Color.Blue),
+        }
+        );
+
+        private static Triangle triangle2 = new Triangle(new Vertex[] {
+                new Vertex(new Vector(0f, 0f), Color.Red),
+                new Vertex(new Vector(0.5f, 0f), Color.Green),
+                new Vertex(new Vector(0f, 0.5f), Color.Blue),
             }
         );
         
@@ -35,7 +39,6 @@ namespace SharpEngine
         static void Main(string[] args)
         {
             var window = CreateWindow();
-            LoadTriangleIntoBuffer();
             CreateShaderProgram();
             var direction = new Vector(0.0003f, 0.0003f);
             var multiplier = 0.999f;
@@ -46,9 +49,9 @@ namespace SharpEngine
                 Glfw.PollEvents(); // react to window changes (position etc.)
                 ClearScreen();
                 Render(window);
-                LoadTriangleIntoBuffer();
-                
                 triangle.Scale(multiplier);
+                triangle2.Scale(multiplier);
+
                 
                 // 2. Keep track of the Scale, so we can reverse it
                 if (triangle.CurrentScale <= 0.5f) {
@@ -60,6 +63,8 @@ namespace SharpEngine
 
                 // 3. Move the Triangle by its Direction
                 triangle.Move(direction);
+                triangle2.Move(direction);
+
                 
                 // 4. Check the X-Bounds of the Screen
                 if (triangle.GetMaxBounds().x >= 1 && direction.x > 0 || triangle.GetMinBounds().x <= -1 && direction.x < 0) {
@@ -84,6 +89,7 @@ namespace SharpEngine
         
         static void Render(Window window) {
             triangle.Render();
+            triangle2.Render();
             Glfw.SwapBuffers(window);
         }
 
@@ -109,17 +115,6 @@ namespace SharpEngine
             glAttachShader(program, fragmentShader);
             glLinkProgram(program);
             glUseProgram(program);
-        }
-
-        static unsafe void LoadTriangleIntoBuffer() {
-            var vertexArray = glGenVertexArray();
-            var vertexBuffer = glGenBuffer();
-            glBindVertexArray(vertexArray);
-            glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-            glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(Vertex), Marshal.OffsetOf(typeof(Vertex), nameof(Vertex.position)));
-            glVertexAttribPointer(1, 4, GL_FLOAT, false, sizeof(Vertex), Marshal.OffsetOf(typeof(Vertex), nameof(Vertex.color)));
-            glEnableVertexAttribArray(0);
-            glEnableVertexAttribArray(1);
         }
 
         static Window CreateWindow() {
