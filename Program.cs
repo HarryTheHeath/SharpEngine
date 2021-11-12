@@ -10,32 +10,19 @@ namespace SharpEngine
 {
     class Program
     {
-        private static Triangle triangle = new Triangle(new Vertex[] {
-            new Vertex(new Vector(0f, 0f), Color.Red),
-            new Vertex(new Vector(1f, 0f), Color.Green),
-            new Vertex(new Vector(0f, 1f), Color.Blue),
-        }
-        );
-
-        private static Triangle triangle2 = new Triangle(new Vertex[] {
-                new Vertex(new Vector(0f, 0f), Color.Blue),
-                new Vertex(new Vector(0.5f, 0f), Color.Red),
-                new Vertex(new Vector(0f, 0.5f), Color.Green),
+        public class Triangle : Shape
+        {
+            public Triangle(float width, float height, Vector position, Color[] color) : base(new Vertex[3])
+            {
+                vertices[0] = new Vertex(new Vector(position.x - width / 2, position.y - height / 2), color[0]);
+                vertices[1] = new Vertex(new Vector(position.x + width / 2, position.y - height / 2), color[1]);
+                vertices[2] = new Vertex(new Vector(position.x, position.y + height / 2), color[2]);
             }
-        );
-        
-        /*static Vector[] vertices = new Vector[] {
-            new Vector(-0.1f, -0.1f),
-            new Vector(0.1f, -0.1f),
-            new Vector(0f, 0.1f),
-            new Vector(0.1f, 0.1f),
-            new Vector(0.3f, 0.1f),
-            new Vector(0.2f, 0.3f),
-            new Vector(-0.3f, -0.3f),
-            new Vector(-0.1f, -0.3f),
-            new Vector(-0.2f, -0.1f)
-        };*/
-        
+        }
+        private static Shape triangle = new Triangle(0.2f, 0.2f, new Vector(0, 0), new Color[] {new Color(1, 0, 0, 1), new Color(0, 1, 0, 1), new Color(0, 0, 1, 1)});
+
+        private static Shape triangle2 = new Triangle(0.2f, 0.2f, new Vector(-0.2f, -0.2f), new Color[] {new Color(0, 0, 1, 1), new Color(0, 1, 0, 1), new Color(1, 0, 0, 1)});
+
         static void Main(string[] args)
         {
             var window = CreateWindow();
@@ -49,6 +36,7 @@ namespace SharpEngine
                 Glfw.PollEvents(); // react to window changes (position etc.)
                 ClearScreen();
                 Render(window);
+                
                 triangle.Scale(multiplier);
                 triangle2.Scale(multiplier);
 
@@ -81,15 +69,6 @@ namespace SharpEngine
 
             }
         }
-
-        /*static void Rotate()
-        {
-            for (var i = 0; i < vertices.Length; i++)
-            {
-                vertices[i].position.x = (float)(vertices[i].position.x * Math.Cos(0.01f) + vertices[i].position.y * Math.Sin(0.01f));
-                vertices[i].position.y = (float)(vertices[i].position.y * Math.Cos(0.01f) - vertices[i].position.x * Math.Sin(0.01f));  
-            }
-        }*/
         
         static void Render(Window window) {
             triangle.Render();
