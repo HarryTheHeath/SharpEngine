@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 using System.Runtime.InteropServices;
 using OpenGL;
 using static OpenGL.Gl;
@@ -19,7 +20,7 @@ namespace SharpEngine
             CurrentScale = 1f;
             LoadTriangleIntoBuffer();
         }
-
+        
         public Vector GetMinBounds()
         {
             var min = this.vertices[0].position;
@@ -56,7 +57,6 @@ namespace SharpEngine
             {
                 this.vertices[i].position *= multiplier;
             }
-
             Move(center);
 
             this.CurrentScale *= multiplier;
@@ -69,6 +69,25 @@ namespace SharpEngine
                 this.vertices[i].position += direction;
             }
         }
+
+        public void Rotate()
+        {
+            float rotation = 0.003f;
+            var center = GetCenter();
+            Move(center * -1);
+
+            for (int i = 0; i < vertices.Length; i++)
+            {
+                Vector position = vertices[i].position;
+                var currentangle = Math.Atan2(position.y, position.x);
+                var currentmagnitude = MathF.Sqrt(MathF.Pow(position.x, 2) + MathF.Pow(position.y, 2));
+                var newXPosition = MathF.Cos((float) currentangle + rotation) * currentmagnitude;
+                var newYPosition = MathF.Sin((float) currentangle + rotation) * currentmagnitude;
+                vertices[i].position = new Vector(newXPosition, newYPosition);
+            }
+            Move(center);
+        }
+
 
         public unsafe void Render()
         {
