@@ -11,7 +11,7 @@ namespace SharpEngine
     public class Shape
     {
 
-        private Vertex[] vertices;
+        protected Vertex[] vertices;
         public float CurrentScale { get; private set; }
 
         public Shape(Vertex[] vertices)
@@ -20,7 +20,12 @@ namespace SharpEngine
             CurrentScale = 1f;
             LoadTriangleIntoBuffer();
         }
-        
+
+        protected Shape()
+        {
+            throw new NotImplementedException();
+        }
+
         public Vector GetMinBounds()
         {
             var min = this.vertices[0].position;
