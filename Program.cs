@@ -10,18 +10,11 @@ namespace SharpEngine
 {
     class Program
     {
-        public class Triangle : Shape
-        {
-            public Triangle(float width, float height, Vector position, Color[] color) : base(new Vertex[3])
-            {
-                vertices[0] = new Vertex(new Vector(position.x - width / 2, position.y - height / 2), color[0]);
-                vertices[1] = new Vertex(new Vector(position.x + width / 2, position.y - height / 2), color[1]);
-                vertices[2] = new Vertex(new Vector(position.x, position.y + height / 2), color[2]);
-            }
-        }
-        private static Shape triangle = new Triangle(0.2f, 0.2f, new Vector(0, 0), new Color[] {new Color(1, 0, 0, 1), new Color(0, 1, 0, 1), new Color(0, 0, 1, 1)});
+        private static Shape triangle = new Triangle(0.2f, 0.2f, new Vector(0, 0), 
+            new Color[] {new Color(1, 0, 0, 1), new Color(0, 1, 0, 1), new Color(0, 0, 1, 1)});
 
-        private static Shape triangle2 = new Triangle(0.2f, 0.2f, new Vector(-0.2f, -0.2f), new Color[] {new Color(0, 0, 1, 1), new Color(0, 1, 0, 1), new Color(1, 0, 0, 1)});
+        private static Shape triangle2 = new Triangle(0.2f, 0.2f, new Vector(-0.2f, -0.2f), 
+            new Color[] {new Color(1, 0, 1, 1), new Color(1, 1, 0, 1), new Color(0, 1, 1, 1)});
 
         static void Main(string[] args)
         {
