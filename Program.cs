@@ -8,8 +8,28 @@ using Monitor = GLFW.Monitor;
 
 namespace SharpEngine
 {
+    
+    public class Rectangle : Shape
+    {
+        public Rectangle(float width, float height, Vector position, Color[] color) : base(new Vertex[6])
+        {
+            vertices[0] = new Vertex(new Vector(position.x - width / 2, position.y - height / 2), color[0]);
+            vertices[1] = new Vertex(new Vector(position.x + width / 2, position.y - height / 2), color[1]);
+            vertices[2] = new Vertex(new Vector(position.x - width / 2, position.y + height / 2), color[2]);
+            vertices[3] = new Vertex(new Vector(position.x + width / 2, position.y + height/ 2), color[3]);
+            vertices[4] = new Vertex(new Vector(position.x - width / 2, position.y + height/ 2), color[4]);
+            vertices[5] = new Vertex(new Vector(position.x + width / 2, position.y - height/ 2), color[5]);
+        }
+    }
+    
     class Program
     {
+        
+        private static Shape rectangle = new Rectangle(0.2f, 0.2f, new Vector(0.2f, 0.2f), 
+            new Color[] {new Color(1, 1, 0, 1), new Color(0, 1, 1, 1), new Color(1, 0, 1, 1), 
+                                new Color(0, 0, 1, 1), new Color(0, 1, 0, 1), new Color(1, 0, 1, 1)});
+        
+        
         private static Shape triangle = new Triangle(0.2f, 0.2f, new Vector(0, 0), 
             new Color[] {new Color(1, 0, 0, 1), new Color(0, 1, 0, 1), new Color(0, 0, 1, 1)});
 
@@ -32,6 +52,7 @@ namespace SharpEngine
                 
                 triangle.Scale(multiplier);
                 triangle2.Scale(multiplier);
+                rectangle.Scale(multiplier);
 
                 
                 // 2. Keep track of the Scale, so we can reverse it
@@ -45,6 +66,8 @@ namespace SharpEngine
                 // 3. Move the Triangle by its Direction
                 triangle.Move(direction);
                 triangle2.Move(direction);
+                rectangle.Move(direction);
+
 
                 
                 // 4. Check the X-Bounds of the Screen
@@ -59,13 +82,14 @@ namespace SharpEngine
                 
                 triangle.Rotate();
                 triangle2.Rotate();
-
+                rectangle.Rotate();
             }
         }
         
         static void Render(Window window) {
             triangle.Render();
             triangle2.Render();
+            rectangle.Render();
             Glfw.SwapBuffers(window);
         }
 
