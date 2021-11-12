@@ -31,7 +31,6 @@ namespace SharpEngine
             new Vector(-0.1f, -0.3f),
             new Vector(-0.2f, -0.1f)
         };*/
-       
         
         static void Main(string[] args)
         {
@@ -47,6 +46,7 @@ namespace SharpEngine
                 Glfw.PollEvents(); // react to window changes (position etc.)
                 ClearScreen();
                 Render(window);
+                LoadTriangleIntoBuffer();
                 
                 triangle.Scale(multiplier);
                 
