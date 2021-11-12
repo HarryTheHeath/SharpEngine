@@ -18,9 +18,9 @@ namespace SharpEngine
         );
 
         private static Triangle triangle2 = new Triangle(new Vertex[] {
-                new Vertex(new Vector(0f, 0f), Color.Red),
-                new Vertex(new Vector(0.5f, 0f), Color.Green),
-                new Vertex(new Vector(0f, 0.5f), Color.Blue),
+                new Vertex(new Vector(0f, 0f), Color.Blue),
+                new Vertex(new Vector(0.5f, 0f), Color.Red),
+                new Vertex(new Vector(0f, 0.5f), Color.Green),
             }
         );
         
@@ -75,6 +75,10 @@ namespace SharpEngine
                 if (triangle.GetMaxBounds().y >= 1 && direction.y > 0 || triangle.GetMinBounds().y <= -1 && direction.y < 0) {
                     direction.y *= -1;
                 }
+                
+                triangle.Rotate();
+                triangle2.Rotate();
+
             }
         }
 
