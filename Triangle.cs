@@ -8,13 +8,13 @@ using Monitor = GLFW.Monitor;
 
 namespace SharpEngine
 {
-    public class Triangle
+    public class Shape
     {
 
         private Vertex[] vertices;
         public float CurrentScale { get; private set; }
 
-        public Triangle(Vertex[] vertices)
+        public Shape(Vertex[] vertices)
         {
             this.vertices = vertices;
             CurrentScale = 1f;
@@ -79,10 +79,10 @@ namespace SharpEngine
             for (int i = 0; i < vertices.Length; i++)
             {
                 Vector position = vertices[i].position;
-                var currentangle = Math.Atan2(position.y, position.x);
-                var currentmagnitude = MathF.Sqrt(MathF.Pow(position.x, 2) + MathF.Pow(position.y, 2));
-                var newXPosition = MathF.Cos((float) currentangle + rotation) * currentmagnitude;
-                var newYPosition = MathF.Sin((float) currentangle + rotation) * currentmagnitude;
+                var currentAngle = Math.Atan2(position.y, position.x);
+                var currentMagnitude = MathF.Sqrt(MathF.Pow(position.x, 2) + MathF.Pow(position.y, 2));
+                var newXPosition = MathF.Cos((float) currentAngle + rotation) * currentMagnitude;
+                var newYPosition = MathF.Sin((float) currentAngle + rotation) * currentMagnitude;
                 vertices[i].position = new Vector(newXPosition, newYPosition);
             }
             Move(center);
