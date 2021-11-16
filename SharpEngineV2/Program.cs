@@ -38,11 +38,9 @@ namespace SharpEngine
                 while (Glfw.Time > previousFixedStep + fixedDeltaTime) {
                     previousFixedStep += fixedDeltaTime;
                     var walkDirection = new Vector();
-
-
-                    if (window.GetKey(Keys.W))
-                    {
-                        walkDirection += Vector.Forward;
+                    
+                    if (window.GetKey(Keys.W)) {
+                        walkDirection += shape.Transform.Forward;
                     }
                     if (window.GetKey(Keys.S))
                     {

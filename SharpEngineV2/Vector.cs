@@ -5,10 +5,13 @@ namespace SharpEngine {
 		public float x, y, z;
 		
 		public static Vector Forward => new Vector(0, 1);
-		public static Vector Backward => new Vector(0, -1);
+		public static Vector Backward => new (0, -1);
 		public static Vector Left => new Vector(-1, 0);
 		public static Vector Right => new Vector(1, 0);
+		
+		public static Vector Zero => new Vector(0, 0);
 
+		
 		public Vector(float x, float y, float z) {
 			this.x = x;
 			this.y = y;
