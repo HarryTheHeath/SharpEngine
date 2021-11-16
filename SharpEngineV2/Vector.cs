@@ -10,6 +10,7 @@ namespace SharpEngine {
 		public static Vector Right => new Vector(1, 0);
 		
 		public static Vector Zero => new Vector(0, 0);
+		public static float Dot(Vector lhs, Vector rhs) { return lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z; }
 
 		
 		public Vector(float x, float y, float z) {

@@ -27,6 +27,12 @@ namespace SharpEngine
             ground.Transform.CurrentScale = new Vector(10f, 1f, 1f);
             ground.Transform.Position = new Vector(0f, -1f);
             scene.Add(ground);
+            
+            var rectangle = new Rectangle(material);
+            rectangle.Transform.CurrentScale = new Vector(1f, 1f, 1f);
+            rectangle.Transform.Position = new Vector(0.5f, -0.5f);
+            scene.Add(rectangle);
+            
 
             // engine rendering loop
             const int fixedStepNumberPerSecond = 30;
