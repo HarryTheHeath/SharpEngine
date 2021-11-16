@@ -42,8 +42,8 @@ namespace SharpEngine
             scene.Add(newTriangle);
             
             // engine rendering loop
-            var direction = new Vector(0.003f, 0.003f);
-            var multiplier = 0.666f;
+            var direction = new Vector(0.009f, 0.009f);
+            var multiplier = 0.999f;
             var rotation = 0.005f;
             while (window.IsOpen()) {
 
@@ -52,13 +52,12 @@ namespace SharpEngine
                     var triangle = scene.triangles[i];
                 
                     // 2. Keep track of the Scale, so we can reverse it
-                    if (triangle.Transform.CurrentScale.x <= 0.5f) {
+                    if (triangle.Transform.CurrentScale.GetMagnitude() <= 0.5f) {
                         multiplier = 1.001f;
                     }
-                    if (triangle.Transform.CurrentScale.x >= 1f) {
+                    if (triangle.Transform.CurrentScale.GetMagnitude() >= 2f) {
                         multiplier = 0.999f;
                     }
-                    
                     
                     triangle.Transform.Scale(multiplier);
                     triangle.Transform.Rotate(rotation);
@@ -73,10 +72,8 @@ namespace SharpEngine
                         direction.y *= -1;
                     }
                     
-                    
                     triangle.Transform.Move(direction);
                 }
-                
                 window.Render();
             }
         }

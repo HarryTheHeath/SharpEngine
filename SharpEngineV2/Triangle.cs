@@ -1,9 +1,3 @@
-using System;
-using System.Numerics;
-using System.Runtime.InteropServices;
-using static OpenGL.Gl;
-
-using System;
 using System.Runtime.InteropServices;
 using static OpenGL.Gl;
 
@@ -16,8 +10,7 @@ namespace SharpEngine {
 
 		public Transform Transform { get; }
 		public Material material;
-		
-
+            
 		public Triangle(Vertex[] vertices, Material material) {
 			this.vertices = vertices;
 			this.material = material;
@@ -57,7 +50,7 @@ namespace SharpEngine {
 		public Vector GetCenter() {
 			return (GetMinBounds() + GetMaxBounds()) / 2;
 		}
-		
+
 		public unsafe void Render() {
 			this.material.Use();
 			this.material.SetTransform(this.Transform.Matrix);
@@ -69,12 +62,5 @@ namespace SharpEngine {
 			glDrawArrays(GL_TRIANGLES, 0, this.vertices.Length);
 			glBindVertexArray(0);
 		}
-
-		public Vector Rotation()
-		{
-			
-		}
-
-	
 	}
 }
