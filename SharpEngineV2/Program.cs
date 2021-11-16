@@ -19,7 +19,8 @@ namespace SharpEngine
             var scene = new Scene();
             window.Load(scene);
 
-            var shape = new Circle(material);
+            var shape = new Triangle(material);
+            shape.Transform.CurrentScale = new Vector(1f, 2f, 1f);
             scene.Add(shape);
 
             var ground = new Rectangle(material);
@@ -29,12 +30,35 @@ namespace SharpEngine
 
             // engine rendering loop
             const int fixedStepNumberPerSecond = 30;
-            const double fixedStepDuration = 1.0 / fixedStepNumberPerSecond;
+            const float fixedDeltaTime = 1.0f / fixedStepNumberPerSecond;
             double previousFixedStep = 0.0;
+            float movementSpeed = 0.5f;
+            
             while (window.IsOpen()) {
-                while (Glfw.Time > previousFixedStep + fixedStepDuration) {
-                    previousFixedStep += fixedStepDuration;
-                    
+                while (Glfw.Time > previousFixedStep + fixedDeltaTime) {
+                    previousFixedStep += fixedDeltaTime;
+                    var walkDirection = new Vector();
+
+
+                    if (window.GetKey(Keys.W))
+                    {
+                        walkDirection += new Vector(0f, movementSpeed *fixedDeltaTime);
+                    }
+                    if (window.GetKey(Keys.S))
+                    {
+                        walkDirection += new Vector(0f, -movementSpeed *fixedDeltaTime);
+                    }
+                    if (window.GetKey(Keys.A))
+                    {
+                        walkDirection += new Vector(-movementSpeed * fixedDeltaTime,0);
+                    }
+                    if (window.GetKey(Keys.D))
+                    {
+                        walkDirection += new Vector(movementSpeed * fixedDeltaTime,0f);
+                    }
+
+                    walkDirection = walkDirection.Normalize();
+                    shape.Transform.Position += walkDirection * movementSpeed * fixedDeltaTime;
                 }
                 window.Render();
             }

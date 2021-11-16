@@ -16,9 +16,9 @@ namespace SharpEngine {
             for (int i = 0; i < numberOfSegments; i++) {
                 int currentVertex = i * verticesPerSegment;
                 var newAngle = circleRadians / numberOfSegments * (i + 1);
-                result[currentVertex++] = new Vertex(new Vector(), Color.Blue);
-                result[currentVertex++] = new Vertex(new Vector(MathF.Cos(oldAngle), MathF.Sin(oldAngle))*scale, Color.Green);
-                result[currentVertex] = new Vertex(new Vector(MathF.Cos(newAngle), MathF.Sin(newAngle))*scale, Color.Red);
+                result[currentVertex++] = new Vertex(new Vector(), Color.Green);
+                result[currentVertex++] = new Vertex(new Vector(MathF.Cos(oldAngle), MathF.Sin(oldAngle))*scale, Color.Red);
+                result[currentVertex] = new Vertex(new Vector(MathF.Cos(newAngle), MathF.Sin(newAngle))*scale, Color.Blue);
                 oldAngle = newAngle;
             }
 
