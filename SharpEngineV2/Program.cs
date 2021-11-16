@@ -74,6 +74,15 @@ namespace SharpEngine
                         rotation.z -= 2*MathF.PI * fixedDeltaTime;
                         shape.Transform.Rotation = rotation;
                     }
+                    
+                    if (Vector.Dot(shape.Transform.Forward, rectangle.Transform.Forward) <= 0)
+                    {
+                        rectangle.SetColor(Color.Green);
+                    }
+                    else
+                    {
+                        rectangle.SetColor(Color.Red);
+                    }
 
                     walkDirection = walkDirection.Normalize();
                     shape.Transform.Position += walkDirection * movementSpeed * fixedDeltaTime;

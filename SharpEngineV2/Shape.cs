@@ -51,6 +51,14 @@ namespace SharpEngine {
 			return (GetMinBounds() + GetMaxBounds()) / 2;
 		}
 
+		public void SetColor(Color color)
+		{
+			for (var i = 0; i < vertices.Length; i++)
+			{
+				vertices[i].color = color;
+			}
+		}
+
 		public unsafe void Render() {
 			this.material.Use();
 			this.material.SetTransform(this.Transform.Matrix);
