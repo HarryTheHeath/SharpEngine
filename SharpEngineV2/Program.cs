@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using GLFW;
 
 namespace SharpEngine
 {
@@ -45,8 +46,13 @@ namespace SharpEngine
             var direction = new Vector(0.009f, 0.009f);
             var multiplier = 0.999f;
             var rotation = 0.005f;
+            const int fixedStepNumbersPerSecond = 30;
             while (window.IsOpen()) {
-
+                // check if another step should execute now
+                Console.WriteLine(Glfw.Time);
+                
+                window.Render();
+                
                 // Update Triangles
                 for (var i = 0; i < scene.triangles.Count; i++) {
                     var triangle = scene.triangles[i];
