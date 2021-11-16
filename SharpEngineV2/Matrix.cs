@@ -69,5 +69,47 @@ namespace SharpEngine {
 			result.m33 = scale.z;
 			return result;
 		}
+
+		static Matrix RotationX(float x)
+		{
+			var result = Identity;
+			result.m22 = MathF.Cos(x);
+			result.m23 = -MathF.Sin(x);
+			result.m32 = -MathF.Sin(x);
+			result.m33 = MathF.Cos(x);
+			return result;
+
+
+		}
+		
+		static Matrix RotationY(float y)
+		{
+			var result = Identity;
+			result.m11 = MathF.Cos(y);
+			result.m31 = -MathF.Sin(y);
+			result.m13 = -MathF.Sin(y);
+			result.m33 = MathF.Cos(y);
+			return result;
+
+
+		}
+		
+		static Matrix RotationZ(float z)
+		{
+			var result = Identity;
+			result.m11 = MathF.Cos(z);
+			result.m12 = -MathF.Sin(z);
+			result.m21 = -MathF.Sin(z);
+			result.m22 = MathF.Cos(z);
+			return result;
+
+
+		}
+
+
+		public Matrix Rotation(object rotation)
+		{
+			return RotationZ(rotation.z)
+		}
 	}
 }

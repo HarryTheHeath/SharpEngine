@@ -70,6 +70,11 @@ namespace SharpEngine {
 			glBindVertexArray(0);
 		}
 
+		public Vector Rotation()
+		{
+			
+		}
+
 	
 	}
 }
