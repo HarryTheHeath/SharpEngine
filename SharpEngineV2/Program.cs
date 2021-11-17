@@ -22,6 +22,11 @@ namespace SharpEngine
             var shape = new Triangle(material);
             shape.Transform.CurrentScale = new Vector(1f, 2f, 1f);
             scene.Add(shape);
+            
+            var circle = new Circle(material);
+            circle.Transform.CurrentScale = new Vector(1f, 2f, 1f);
+            circle.Transform.Position = new Vector(-0.5f, -0.5f);
+            scene.Add(circle);
 
             var ground = new Rectangle(material);
             ground.Transform.CurrentScale = new Vector(10f, 1f, 1f);
@@ -86,6 +91,19 @@ namespace SharpEngine
 
                     walkDirection = walkDirection.Normalize();
                     shape.Transform.Position += walkDirection * movementSpeed * fixedDeltaTime;
+                    
+                    float direction = Vector.Dot((rectangle.GetCenter() - shape.GetCenter()).Normalize(), shape.Transform.Forward);
+                    bool doesThePlayerFaceTheRectangle = direction > 0;
+                    if (doesThePlayerFaceTheRectangle) {
+                        rectangle.SetColor(Color.Green);
+                    } else {
+                        rectangle.SetColor(Color.Red);
+                    }
+
+                    float dotProduct = Vector.Dot((circle.GetCenter() - shape.GetCenter()).Normalize(), shape.Transform.Forward);
+                    float angle = MathF.Acos(dotProduct);
+                    float factor = angle / MathF.PI;
+                    circle.SetColor(new Color(factor, factor, factor, 1));
                 }
                 window.Render();
             }
